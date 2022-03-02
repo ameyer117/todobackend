@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from todo.models import TodoItem
+from .models import TodoItem
 
 # Create your tests here.
 def createItem(client):
