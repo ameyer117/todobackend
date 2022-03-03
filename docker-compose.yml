@@ -1,0 +1,51 @@
+version: '2.4'
+
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+  release:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SETTINGS_MODULE: todobackend.settings_release
+      MYSQL_HOST: db
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: password
+  app:
+    extends:
+      service: release
+    ports:
+      - "8000:8000"
+    command:
+      - gunicorn
+      - --bind
+      - 0.0.0.0:8000
+      - todobackend.wsgi
+  migrate:
+    extends:
+      service: release
+    ports:
+      - "8000:8000"
+    command:
+      - python3
+      - manage.py
+      - migrate
+      - --no-input
+  db:
+    image: mysql:5.7
+    healthcheck:
+      test: mysqlshow -u $$MYSQL_USER -p$$MYSQL_PASSWORD
+      interval: 3s
+      retries: 10
+    environment:
+      MYSQL_DATABASE: todobackend
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password

@@ -10,7 +10,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 # Must be explicitly specified when Debug is disabled
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
-# Database settings
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
@@ -25,5 +24,5 @@ DATABASES = {
     }
 }
 
-STATIC_ROOT = os.environ.get('STATIC_ROOT', '/public/static')
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', '/public/media')
+STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static')
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', '/media')
